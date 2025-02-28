@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rakanjali - Blood Donation Tracker</title>
+    <style>
+        /* Set background color and font for the entire page */
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Header styling */
+        header {
+            background-color: #e53935;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2rem;
+        }
+
+        /* Navigation styling */
+        nav {
+            background-color: #c62828;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Style the main section of the page */
+        main {
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        /* Style the search section */
+        #search {
+            margin-bottom: 30px;
+        }
+
+        #search h2 {
+            color: #c62828;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #c62828;
+            padding-bottom: 10px;
+        }
+
+        #search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        #search-form select, #search-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+        }
+
+        #search-form button {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px;
+            background-color: #c62828;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #search-form button:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Style the results section */
+        #results {
+            margin-top: 30px;
+        }
+
+        #results h2 {
+            color: #c62828;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #c62828;
+            padding-bottom: 10px;
+        }
+
+        #result-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .donor-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .donor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .donor-card h3 {
+            margin-top: 0;
+            color: #c62828;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .blood-group-badge {
+            background-color: #c62828;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .donor-card p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .donor-card .contact-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #c62828;
+            color: white;
+            text-align: center;
+            border: none;
+            border-radius: 5px;
+            margin-top: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .donor-card .contact-btn:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Hospital section */
+        #hospitals {
+            margin-top: 40px;
+        }
+
+        #hospitals h2 {
+            color: #c62828;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #c62828;
+            padding-bottom: 10px;
+        }
+
+        #hospital-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .hospital-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hospital-card h3 {
+            margin-top: 0;
+            color: #c62828;
+        }
+
+        .hospital-card p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .hospital-card .blood-bank-badge {
+            display: inline-block;
+            background-color: #4caf50;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Footer styling */
+        footer {
+            background-color: #c62828;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            #search-form {
+                flex-direction: column;
+            }
+
+            #search-form select, #search-form button {
+                width: 100%;
+            }
+
+            #result-list, #hospital-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Rakanjali</h1>
+        <p>Connecting Blood Donors with Hospitals in Emergencies</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#search">Find Donors</a></li>
+            <li><a href="#hospitals">Hospitals</a></li>
+            <li><a href="registration.html">Register as Donor</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="certificate.html">Certificate</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section id="search">
+            <h2>Find a Blood Donor</h2>
+            <form id="search-form" onsubmit="event.preventDefault(); searchBloodDonor()">
+                <select id="blood-group">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="Bombay Blood Group"> Bombay Blood Group</option>
+                </select>
+                <select id="country">
+                    <option value="">Select Country</option>
+                    <option value="India">India</option>
+                </select>
+                <select id="state" onchange="populateDistricts()">
+                    <option value="">Select State</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                    <option value="Lakshadweep">Lakshadweep</option>
+                </select>
+                <select id="district" disabled onchange="populateTalukas()">
+                    <option value="">Select District</option>
+                    <!-- District options will be populated dynamically based on the selected state -->
+                </select>
+                <select id="taluka" disabled>
+                    <option value="">Select Taluka</option>
+                    <!-- Taluka options will be populated dynamically based on the selected district -->
+                </select>
+                <button type="submit">Search</button>
+            </form>
+        </section>
+        
+        <section id="results">
+            <h2>Search Results</h2>
+            <div id="result-list">
+                <!-- Results will be populated here -->
+            </div>
+        </section>
+
+        <section id="hospitals">
+            <h2>Nearby Hospitals with Blood Banks</h2>
+            <div id="hospital-list">
+                <!-- Hospital list will be populated here -->
+            </div>
+        </section>
+
+        <section id="register">
+            <h2>Register as a Blood Donor</h2>
+            <form id="register-form" onsubmit="event.preventDefault(); registerDonor()">
+                <!-- Registration form fields will be added here -->
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Rakanjali. All Rights Reserved.</p>
+        <p>Contact: info@rakanjali.org | Phone: +91 1234567890</p>
+    </footer>
+
+    <script>
+        // All cities data included directly in the HTML file
+        
+        // State and district data
+        const stateDistrictData = {
+            "Maharashtra": ["Thane", "Pune", "Mumbai Suburban", "Nashik", "Nagpur", "Ahmadnagar", "Solapur", "Jalgaon", "Kolhapur", "Aurangabad", "Nanded", "Mumbai City", "Akola", "Latur", "Dhule", "Palghar", "Jalna", "Raigarh", "Parbhani", "Satara", "Bid", "Sangli", "Amravati", "Yavatmal", "Buldhana", "Beed", "Nandurbar", "Osmanabad", "Wardha", "Washim", "Hingoli", "Gondiya", "Chandrapur", "Gadchiroli", "Bhandara", "Sindhudurg", "Ratnagiri"],
+            "Karnataka": ["Bangalore Urban", "Bangalore Rural", "Mysore", "Belgaum", "Gulbarga", "Raichur", "Bijapur", "Bagalkot", "Bellary", "Bidar", "Chamarajanagar", "Chikkaballapur", "Chikmagalur", "Chitradurga", "Dakshina Kannada", "Davanagere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kodagu", "Kolar", "Koppal", "Mandya", "Ramanagara", "Shimoga", "Tumkur", "Udupi", "Uttara Kannada", "Yadgir"],
+            "Tamil Nadu": ["Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Salem", "Sivaganga", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"],
+            "Uttar Pradesh": ["Agra", "Aligarh", "Allahabad", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Faizabad", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kheri", "Kushinagar", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shamli", "Shravasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+            "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udaipur", "Dahod", "Dang", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kheda", "Kutch", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+            "Rajasthan": ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"],
+            "West Bengal": ["Alipurduar", "Bankura", "Birbhum", "Cooch Behar", "Dakshin Dinajpur", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Jhargram", "Kalimpong", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "Paschim Bardhaman", "Paschim Medinipur", "Purba Bardhaman", "Purba Medinipur", "Purulia", "South 24 Parganas", "Uttar Dinajpur"],
+            "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Nellore", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+            "Telangana": ["Adilabad", "Bhadradri Kothagudem", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal–Malkajgiri", "Mulugu", "Nagarkurnool", "Nalgonda", "Narayanpet", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Rangareddy", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Wanaparthy", "Warangal Rural", "Warangal Urban", "Yadadri Bhuvanagiri"],
+            "Kerala": ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+            "Punjab": ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawanshahr", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar", "Sangrur", "Tarn Taran"],
+            "Haryana": ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Nuh", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+            "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+            "Odisha": ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+            "Assam": ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Dima Hasao", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+            "Jharkhand": ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+            "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada", "Dhamtari", "Durg", "Gariaband", "Janjgir-Champa", "Jashpur", "Kabirdham", "Kanker", "Kondagaon", "Korba", "Koriya", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
+            "Himachal Pradesh": ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul and Spiti", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+            "Jammu and Kashmir": ["Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua", "Kishtwar", "Kulgam", "Kupwara", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi", "Samba", "Shopian", "Srinagar", "Udhampur"],
+            "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
+            "Goa": ["North Goa", "South Goa"],
+            "Sikkim": ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+            "Tripura": ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+            "Meghalaya": ["East Garo Hills", "East Jaintia Hills", "East Khasi Hills", "North Garo Hills", "Ri-Bhoi", "South Garo Hills", "South West Garo Hills", "South West Khasi Hills", "West Garo Hills", "West Jaintia Hills", "West Khasi Hills"],
+            "Nagaland": ["Dimapur", "Kiphire", "Kohima", "Longleng", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+            "Mizoram": ["Aizawl", "Champhai", "Hnahthial", "Khawzawl", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Saitual", "Serchhip"],
+            "Arunachal Pradesh": ["Anjaw", "Changlang", "Dibang Valley", "East Kameng", "East Siang", "Kamle", "Kra Daadi", "Kurung Kumey", "Lepa Rada", "Lohit", "Longding", "Lower Dibang Valley", "Lower Siang", "Lower Subansiri", "Namsai", "Pakke Kessang", "Papum Pare", "Shi Yomi", "Siang", "Tawang", "Tirap", "Upper Siang", "Upper Subansiri", "West Kameng", "West Siang"],
+            "Manipur": ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Pherzawl", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+            "Andaman and Nicobar Islands": ["Nicobar", "North and Middle Andaman", "South Andaman"],
+            "Lakshadweep": ["Lakshadweep"]
+        };
+
+        // Taluka data for Maharashtra districts
+        const talukaData = {
+            "Thane": ["Thane", "Kalyan", "Murbad", "Bhiwandi", "Vasai", "Uran", "Shahapur", "Ambarnath", "Jawhar", "Vikramgad", "Palghar", "Talasari"],
+            "Pune": ["Pune City", "Baramati", "Junnar", "Shirur", "Maval", "Daund", "Indapur", "Purandar", "Velhe", "Bhor", "Haveli", "Khed", "Mulshi", "Ambegaon"],
+            "Mumbai Suburban": ["Andheri", "Borivali", "Kandivali", "Dahisar", "Goregaon", "Jogeshwari", "Juhu", "Malad", "Santacruz", "Vile Parle", "Kurla", "Chembur", "Ghatkopar", "Mulund", "Powai", "Bandra", "Khar"],
+            "Nashik": ["Nashik", "Niphad", "Dindori", "Malegaon", "Nashik City", "Sinnar", "Igatpuri", "Trimbak", "Baglan", "Chandwad", "Deola", "Kalwan", "Peint", "Satana", "Yeola"],
+            "Nagpur": ["Nagpur City", "Nagpur Rural", "Ramtek", "Kamptee", "Katol", "Kalmeshwar", "Hingna", "Umred", "Kuhi", "Narkhed", "Parshioni", "Mouda", "Savner", "Parseoni", "Bhiwapur"],
+            "Ahmadnagar": ["Ahmadnagar City", "Rahuri", "Sangamner", "Shrirampur", "Kopargaon", "Shevgaon", "Akole", "Sangamner", "Karjat", "Jamkhed", "Parner", "Pathardi", "Shevgaon", "Nevasa"],
+            "Solapur": ["Solapur North", "Solapur South", "Barshi", "Madha", "Karmala", "Malshiras", "Pandharpur", "Sangole", "Mangalvedha", "Mohol"],
+            "Jalgaon": ["Jalgaon City", "Jalgaon Rural", "Amalner", "Bhusawal", "Chalisgaon", "Chopda", "Dharangaon", "Erandol", "Jalgaon Jamod", "Jamner", "Muktainagar", "Pachora", "Parola", "Yawal", "Raver"],
+            "Kolhapur": ["Kolhapur North", "Kolhapur South", "Karvir", "Gadhinglaj", "Hatkangale", "Shirol", "Kagal", "Bhudargad", "Radhanagari", "Shahuwadi", "Ajara", "Chandgad"],
+            "Aurangabad": ["Aurangabad City", "Aurangabad Rural", "Vaijapur", "Sillod", "Gangapur", "Paithan", "Kannad", "Phulambri", "Soygaon"],
+            "Nanded": ["Nanded North", "Nanded South", "Ardhapur", "Bhokar", "Biloli", "Deglur", "Dharmabad", "Hadgaon", "Himayatnagar", "Kandhar", "Kinwat", "Loha", "Mahoor", "Mudkhed", "Mukhed", "Naigaon", "Umri"],
+            "Mumbai City": ["Dadar", "Fort", "Girgaon", "Kalbadevi", "Parel", "Tardeo", "Byculla", "Charni Road", "Malabar Hill", "Marine Lines", "Grant Road"],
+            "Akola": ["Akola City", "Akot", "Balapur", "Murtijapur", "Telhara", "Akola Rural", "Barshitakli", "Patur", "Anjangaon Surji", "Alegaon"],
+            "Latur": ["Latur City", "Latur Rural", "Ahmadpur", "Ausa", "Chakur", "Deoni", "Jalkot", "Renapur", "Shirur Anantpal", "Udgir"],
+            "Dhule": ["Dhule City", "Dhule Rural", "Sakri", "Shirpur", "Sindkhede", "Chalisgaon", "Chopda", "Dharangaon", "Erandol", "Jalgaon Jamod", "Jamner", "Muktainagar", "Pachora", "Parola", "Yawal", "Raver"],
+            "Palghar": ["Palghar", "Dahanu", "Jawhar", "Mokhada", "Talasari", "Vada", "Vasai", "Vikramgad"],
+            "Jalna": ["Jalna", "Ambad", "Badnapur", "Bhokardan", "Ghansawangi", "Jafrabad", "Partur"],
+            "Raigarh": ["Alibag", "Karjat", "Khalapur", "Mahad", "Mangaon", "Mhasala", "Murud", "Panvel", "Pen", "Poladpur", "Roha", "Shrivardhan", "Tala", "Uran"],
+            "Parbhani": ["Parbhani City", "Parbhani Rural", "Gangakhed", "Jintur", "Manwath", "Palam", "Pathri", "Purna", "Sailu", "Sonpeth"],
+            "Satara": ["Satara", "Jaoli", "Karad", "Khandala", "Khatav", "Koregaon", "Mahabaleshwar", "Man", "Patan", "Phaltan", "Rahimatpur", "Wai"],
+            "Bid": ["Bid", "Ambejogai", "Ashti", "Bhoom", "Dharur", "Georai", "Kaij", "Manjlegaon", "Parali", "Patoda"],
+            "Amravati": ["Amravati City", "Amravati Rural", "Achalpur", "Bhatkuli", "Chandurbazar", "Chandur Railway", "Chandur Rly.", "Daryapur", "Dhamangaon Railway", "Dhamangaon Rly.", "Dharni", "Morshi", "Nandgaon-Khandeshwar", "Teosa", "Warud"],
+            "Yavatmal": ["Yavatmal", "Arni", "Babulgaon", "Darwha", "Digras", "Ghatanji", "Kalamb", "Kelapur", "Mahagaon", "Maregaon", "Ner", "Pandharkawada", "Pusad", "Ralegaon", "Umarkhed", "Wani", "Zari-Jamani"],
+            "Buldhana": ["Buldhana", "Chikhli", "Deulgaon Raja", "Jalgaon (Jamod)", "Khamgaon", "Lonar", "Mehekar", "Mehkar", "Sangrampur", "Shegaon", "Sindkhed Raja"],
+            "Beed": ["Beed", "Ambejogai", "Ashti", "Georai", "Kada", "Kaij", "Majalgaon", "Parali", "Patoda"],
+            "Nandurbar": ["Nandurbar", "Akkalkuwa", "Akrani", "Nawapur", "Shahade", "Talode"],
+            "Osmanabad": ["Osmanabad", "Bhoom", "Kalamb", "Lohara", "Omerga", "Paranda", "Tuljapur", "Umarga", "Washi"],
+            "Wardha": ["Wardha", "Arvi", "Ashti", "Deoli", "Hinganghat", "Karanja", "Samudrapur", "Seloo"],
+            "Washim": ["Washim", "Malegaon", "Mangrulpir", "Manora", "Risod"],
+            "Hingoli": ["Hingoli", "Aundha (Nagnath)", "Basmat", "Kalamnuri", "Sengaon"],
+            "Gondiya": ["Gondiya", "Amgaon", "Arjuni Morgaon", "Deori", "Goregaon", "Sadak-Arjuni", "Tirora"],
+            "Chandrapur": ["Chandrapur", "Ballarpur", "Bhadravati", "Brahmapuri", "Chimur", "Gondpipri", "Korpana", "Mul", "Nagbhir", "Pombhurna", "Rajura", "Sawali", "Sindewahi", "Warora"],
+            "Gadchiroli": ["Gadchiroli", "Armori", "Aheri", "Chamorshi", "Desaiganj (Vadasa)", "Dhanora", "Etapalli", "Bhamragad", "Kurkheda"],
+            "Bhandara": ["Bhandara", "Lakhandur", "Lakhani", "Moha", "Pauni", "Sakoli", "Tumsar"],
+            "Sindhudurg": ["Sindhudurg", "Devgad", "Dodamarg", "Kankavli", "Kudal", "Malwan", "Sawantwadi", "Vaibhavvadi", "Vengurla"],
+            "Ratnagiri": ["Ratnagiri", "Chiplun", "Dapoli", "Guhagar", "Khed", "Lanja", "Mandangad", "Rajapur", "Sangameshwar"]
+        };
+
+        // Sample data for Karnataka districts
+        const karnatakaData = {
+            "Bangalore Urban": ["Bangalore North", "Bangalore South", "Bangalore East", "Bangalore West", "Anekal"],
+            "Mysore": ["Mysore", "Nanjangud", "T. Narasipura", "H.D. Kote", "Hunsur", "K.R. Nagar", "Periyapatna"],
+            "Belgaum": ["Belgaum", "Khanapur", "Bailhongal", "Saundatti", "Ramdurg", "Gokak", "Hukkeri", "Chikodi", "Raibag", "Athani"]
+            // Add more talukas for other districts as needed
+        };
+
+        // Sample data for Tamil Nadu districts
+        const tamilNaduData = {
+            "Chennai": ["Chennai North", "Chennai South", "Chennai East", "Chennai West", "Chennai Central"],
+            "Coimbatore": ["Coimbatore North", "Coimbatore South", "Mettupalayam", "Pollachi", "Valparai", "Sulur"],
+            "Madurai": ["Madurai North", "Madurai South", "Madurai East", "Madurai West", "Melur", "Vadipatti", "Usilampatti", "Peraiyur"]
+            // Add more talukas for other districts as needed
+        };
+
+        // Sample data for hospitals in major cities
+        const hospitalData = {
+            "Mumbai": [
+                { name: "Lilavati Hospital", address: "A-791, Bandra Reclamation, Bandra West", contact: "022-26751000", bloodBanks: true },
+                { name: "Tata Memorial Hospital", address: "Dr. E Borges Road, Parel", contact: "022-24177000", bloodBanks: true },
+                { name: "Kokilaben Dhirubhai Ambani Hospital", address: "Four Bungalows, Andheri West", contact: "022-30999999", bloodBanks: true }
+            ],
+            "Delhi": [
+                { name: "AIIMS Delhi", address: "Ansari Nagar East", contact: "011-26588500", bloodBanks: true },
+                { name: "Fortis Hospital", address: "Okhla road, Sukhdev Vihar", contact: "011-47134613", bloodBanks: true },
+                { name: "Max Super Speciality Hospital", address: "1, Press Enclave Road, Saket", contact: "011-26515050", bloodBanks: true }
+            ],
+            "Bangalore": [
+                { name: "Manipal Hospital", address: "98, HAL Airport Road", contact: "080-25024444", bloodBanks: true },
+                { name: "Narayana Hrudayalaya", address: "258/A, Bommasandra Industrial Area", contact: "080-71222222", bloodBanks: true },
+                { name: "Columbia Asia Hospital", address: "26/4, Brigade Gateway, Yeshwanthpur", contact: "080-39898969", bloodBanks: true }
+            ],
+            "Chennai": [
+                { name: "Apollo Hospitals", address: "21, Greams Lane, Off Greams Road", contact: "044-28290200", bloodBanks: true },
+                { name: "Stanley Medical College and Hospital", address: "Old Jail Road, Royapuram", contact: "044-25281347", bloodBanks: true },
+                { name: "Madras Medical College", address: "EVR Periyar Salai, Park Town", contact: "044-25305000", bloodBanks: true }
+            ],
+            "Kolkata": [
+                { name: "AMRI Hospital", address: "JC 16-17, Salt Lake City", contact: "033-66800000", bloodBanks: true },
+                { name: "Fortis Hospital", address: "730, Anandapur, E.M. Bypass", contact: "033-66284444", bloodBanks: true },
+                { name: "Peerless Hospital", address: "360, Panchasayar, Kolkata", contact: "033-40111222", bloodBanks: true }
+            ]
+        };
+
+        // Blood donor data structure (sample)
+        const bloodDonorSample = [
+            {
+                id: 1,
+                name: "Rahul Sharma",
+                bloodGroup: "O+",
+                contact: "9876543210",
+                location: {
+                    state: "Maharashtra",
+                    district: "Mumbai City",
+                    taluka: "Dadar"
+                },
+                lastDonation: "2023-10-15",
+                available: true
+            },
+            {
+                id: 2,
+                name: "Priya Patel",
+                bloodGroup: "A+",
+                contact: "8765432109",
+                location: {
+                    state: "Gujarat",
+                    district: "Ahmedabad",
+                    taluka: "Ahmedabad City"
+                },
+                lastDonation: "2023-09-20",
+                available: true
+            },
+            {
+                id: 3,
+                name: "Amit Kumar",
+                bloodGroup: "B-",
+                contact: "7654321098",
+                location: {
+                    state: "Karnataka",
+                    district: "Bangalore Urban",
+                    taluka: "Bangalore South"
+                },
+                lastDonation: "2023-11-05",
+                available: false
+            }
+        ];
+
+        function populateDistricts() {
+            var stateSelect = document.getElementById("state");
+            var districtSelect = document.getElementById("district");
+            var talukaSelect = document.getElementById("taluka");
+            var selectedState = stateSelect.options[stateSelect.selectedIndex].value;
+
+            // Clear existing options
+            districtSelect.innerHTML = "<option value=''>Select District</option>";
+            talukaSelect.innerHTML = "<option value=''>Select Taluka</option>";
+            talukaSelect.disabled = true;
+
+            // Populate districts based on selected state
+            if (selectedState in stateDistrictData) {
+                stateDistrictData[selectedState].forEach(function (district) {
+                    var option = document.createElement("option");
+                    option.text = district;
+                    option.value = district;
+                    districtSelect.add(option);
+                });
+                districtSelect.disabled = false;
+            } else {
+                districtSelect.disabled = true;
+            }
+        }
+
+        function populateTalukas() {
+            var districtSelect = document.getElementById("district");
+            var talukaSelect = document.getElementById("taluka");
+            var selectedDistrict = districtSelect.options[districtSelect.selectedIndex].value;
+
+            // Clear existing options
+            talukaSelect.innerHTML = "<option value=''>Select Taluka</option>";
+
+            // Get the appropriate taluka data based on the state
+            var stateSelect = document.getElementById("state");
+            var selectedState = stateSelect.options[stateSelect.selectedIndex].value;
+            
+            let talukaDataSource;
+            if (selectedState === "Maharashtra") {
+                talukaDataSource = talukaData;
+            } else if (selectedState === "Karnataka") {
+                talukaDataSource = karnatakaData;
+            } else if (selectedState === "Tamil Nadu") {
+                talukaDataSource = tamilNaduData;
+            } else {
+                // Default empty object for other states
+                talukaDataSource = {};
+            }
+
+            // Populate talukas based on selected district
+            if (selectedDistrict in talukaDataSource) {
+                talukaDataSource[selectedDistrict].forEach(function (taluka) {
+                    var option = document.createElement("option");
+                    option.text = taluka;
+                    option.value = taluka;
+                    talukaSelect.add(option);
+                });
+                talukaSelect.disabled = false;
+            } else {
+                talukaSelect.disabled = true;
+            }
+        }
+
+        function searchBloodDonor() {
+            // Retrieve selected values
+            var bloodGroup = document.getElementById("blood-group").value;
+            var country = document.getElementById("country").value;
+            var state = document.getElementById("state").value;
+            var district = document.getElementById("district").value;
+            var taluka = document.getElementById("taluka").value;
+
+            // For demonstration, display sample donors
+            displaySampleDonors(bloodGroup, state, district, taluka);
+            
+            // Also display nearby hospitals
+            displayNearbyHospitals(state, district);
+        }
+
+        function displaySampleDonors(bloodGroup, state, district, taluka) {
+            var resultList = document.getElementById("result-list");
+            resultList.innerHTML = "";
+
+            // Filter the sample donors based on search criteria
+            var filteredDonors = bloodDonorSample.filter(function(donor) {
+                return (bloodGroup === "" || donor.bloodGroup === bloodGroup) &&
+                       (state === "" || donor.location.state === state) &&
+                       (district === "" || donor.location.district === district) &&
+                       (taluka === "" || donor.location.taluka === taluka) &&
+                       donor.available === true;
+            });
+
+            if (filteredDonors.length === 0) {
+                resultList.innerHTML = "<p>No donors found matching your criteria. Please try with different search parameters.</p>";
+                return;
+            }
+
+            // Display the filtered donors
+            filteredDonors.forEach(function(donor) {
+                var donorCard = document.createElement("div");
+                donorCard.className = "donor-card";
+                
+                donorCard.innerHTML = `
+                    <h3>${donor.name} <span class="blood-group-badge">${donor.bloodGroup}</span></h3>
+                    <p><strong>Location:</strong> ${donor.location.taluka}, ${donor.location.district}, ${donor.location.state}</p>
+                    <p><strong>Last Donation:</strong> ${new Date(donor.lastDonation).toLocaleDateString()}</p>
+                    <a href="tel:${donor.contact}" class="contact-btn">Contact Donor</a>
+                `;
+                
+                resultList.appendChild(donorCard);
+            });
+        }
+
+        function displayNearbyHospitals(state, district) {
+            var hospitalList = document.getElementById("hospital-list");
+            hospitalList.innerHTML = "";
+
+            // For demonstration, show hospitals based on state
+            let cityToShow = "";
+            if (state === "Maharashtra" && (district === "Mumbai City" || district === "Mumbai Suburban")) {
+                cityToShow = "Mumbai";
+            } else if (state === "Karnataka" && district === "Bangalore Urban") {
+                cityToShow = "Bangalore";
+            } else if (state === "Tamil Nadu" && district === "Chennai") {
+                cityToShow = "Chennai";
+            } else if (state === "West Bengal" && district === "Kolkata") {
+                cityToShow = "Kolkata";
+            } else {
+                hospitalList.innerHTML = "<p>No hospital information available for the selected location.</p>";
+                return;
+            }
+
+            // Display hospitals for the selected city
+            if (hospitalData[cityToShow]) {
+                hospitalData[cityToShow].forEach(function(hospital) {
+                    var hospitalCard = document.createElement("div");
+                    hospitalCard.className = "hospital-card";
+                    
+                    hospitalCard.innerHTML = `
+                        <h3>${hospital.name}</h3>
+                        <p><strong>Address:</strong> ${hospital.address}</p>
+                        <p><strong>Contact:</strong> ${hospital.contact}</p>
+                        ${hospital.bloodBanks ? '<span class="blood-bank-badge">Blood Bank Available</span>' : ''}
+                    `;
+                    
+                    hospitalList.appendChild(hospitalCard);
+                });
+            }
+        }
+
+        function registerDonor() {
+            // This function will handle donor registration
+            alert("Registration functionality will be implemented in the next phase.");
+        }
+
+        // Initialize the page
+        document.addEventListener("DOMContentLoaded", function() {
+            // You can add any initialization code here
+            console.log("Rakanjali Blood Donation Tracker initialized");
+        });
+    </script>
+</body>
+
+</html>
