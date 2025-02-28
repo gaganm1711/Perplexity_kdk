@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Request via WhatsApp</title>
+    <style>
+        /* Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Background Styling */
+        body {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Bubbles */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 10%, transparent 50%);
+            animation: moveBackground 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes moveBackground {
+            from { transform: translateX(-5%) translateY(-5%); }
+            to { transform: translateX(5%) translateY(5%); }
+        }
+
+        /* Glassmorphism Container */
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 420px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        /* Input Fields */
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: all 0.3s ease-in-out;
+        }
+
+        input:focus {
+            border: 1px solid #ffeb3b;
+            outline: none;
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Error Messages */
+        .error {
+            color: #ffeb3b;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Button Styling */
+        button {
+            width: 100%;
+            background: #ffeb3b;
+            color: #000;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: #ffcc00;
+            transform: scale(1.05);
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* WhatsApp Icon */
+        .whatsapp-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Request Blood via WhatsApp</h2>
+
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" placeholder="Enter your name">
+        <div class="error" id="nameError">Please enter your name.</div>
+
+        <label for="bloodType">Blood Type:</label>
+        <input type="text" id="bloodType" placeholder="e.g., O+, A-, B+">
+        <div class="error" id="bloodTypeError">Please enter a valid blood type.</div>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" placeholder="Enter city or hospital">
+        <div class="error" id="locationError">Please enter a location.</div>
+
+        <label for="contact">Your Contact Number:</label>
+        <input type="text" id="contact" placeholder="Enter your phone number">
+        <div class="error" id="contactError">Please enter a valid 10-digit phone number.</div>
+
+        <button id="sendBtn" onclick="sendWhatsApp()" disabled>
+            <img class="whatsapp-icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+            Send Request
+        </button>
+    </div>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+
+            let name = document.getElementById("name").value.trim();
+            let bloodType = document.getElementById("bloodType").value.trim();
+            let location = document.getElementById("location").value.trim();
+            let contact = document.getElementById("contact").value.trim();
+
+            let nameError = document.getElementById("nameError");
+            let bloodTypeError = document.getElementById("bloodTypeError");
+            let locationError = document.getElementById("locationError");
+            let contactError = document.getElementById("contactError");
+
+            nameError.style.display = name ? "none" : "block";
+            bloodTypeError.style.display = /^[ABO][+-]?$/.test(bloodType) ? "none" : "block";
+            locationError.style.display = location ? "none" : "block";
+            contactError.style.display = /^[0-9]{10}$/.test(contact) ? "none" : "block";
+
+            isValid = name && /^[ABO][+-]?$/.test(bloodType) && location && /^[0-9]{10}$/.test(contact);
+
+            document.getElementById("sendBtn").disabled = !isValid;
+        }
+
+        function sendWhatsApp() {
+            let name = document.getElementById("name").value.trim();
+            let bloodType = document.getElementById("bloodType").value.trim();
+            let location = document.getElementById("location").value.trim();
+            let contact = document.getElementById("contact").value.trim();
+
+            let message = `Hello, my name is ${name}. I need blood of type ${bloodType} at ${location}. Please contact me at ${contact}.`;
+            let phoneNumber = "8080392764"; // Replace with actual WhatsApp number
+
+            let url = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+            window.open(url, "_blank");
+        }
+
+        document.querySelectorAll("input").forEach(input => input.addEventListener("input", validateForm));
+    </script>
+
+</body>
+</html>

@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Blood Donation Certificate</title>
+    <title>Blood Donation Certificate</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
     <style>
+        /* Reset */
         * {
             margin: 0;
             padding: 0;
@@ -12,95 +16,113 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f2f2f2;
-            flex-direction: column;
+            background: linear-gradient(135deg, #ff4b6e, #ff7854);
+            color: white;
             padding: 20px;
+            text-align: center;
         }
 
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 850px;
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.2);
             text-align: center;
+            color: #333;
         }
 
         h1 {
             font-size: 2.5rem;
-            color: #333;
-            margin-bottom: 30px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #ff4b6e;
+            text-transform: uppercase;
         }
 
         .form-container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 15px;
             margin-bottom: 30px;
         }
 
         .form-container input, .form-container select {
-            width: 300px;
+            width: 100%;
+            max-width: 350px;
             padding: 12px;
-            margin: 10px 0;
             font-size: 1rem;
             border-radius: 5px;
-            border: 1px solid #ddd;
-            transition: border-color 0.3s ease;
+            border: 2px solid #ff4b6e;
+            background: white;
+            color: #333;
+            text-align: center;
+            transition: 0.3s ease-in-out;
+        }
+
+        .form-container input::placeholder {
+            color: #888;
         }
 
         .form-container input:focus, .form-container select:focus {
             border-color: #ff4b6e;
             outline: none;
+            box-shadow: 0px 0px 10px rgba(255, 75, 110, 0.5);
         }
 
         button {
             padding: 12px 30px;
-            background-color: #ff4b6e;
+            background: #ff4b6e;
             color: white;
             font-size: 1.2rem;
+            font-weight: bold;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            transition: 0.3s ease-in-out;
         }
 
         button:hover {
-            background-color: #e3434e;
+            background: #e3434e;
+            transform: scale(1.05);
         }
 
         .certificate-preview {
+            display: none;
             width: 100%;
             max-width: 800px;
-            margin-top: 50px;
-            padding: 20px;
+            margin-top: 30px;
+            padding: 30px;
             border-radius: 10px;
-            background-color: #fff;
+            background-color: white; /* FIX: Solid background */
             border: 5px solid #ff4b6e;
-            display: none;
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            color: #333;
+            position: relative;
         }
 
         .certificate-preview h2 {
             font-size: 2rem;
-            margin-bottom: 20px;
-            color: #333;
+            margin-bottom: 10px;
+            color: #ff4b6e;
         }
 
         .certificate-content {
-            text-align: center;
             font-size: 18px;
             color: #444;
         }
 
         .certificate-content .name {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: bold;
             color: #ff4b6e;
         }
@@ -117,23 +139,25 @@
         }
 
         .certificate-content img {
-            max-width: 200px;
+            max-width: 150px;
             margin-top: 20px;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
+            border: 2px solid #ff4b6e;
+            border-radius: 5px;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .container {
-                width: 90%;
-                padding: 15px;
+            h1 {
+                font-size: 2rem;
             }
 
-            .form-container input, .form-container select {
-                width: 100%;
-                max-width: 250px;
+            button {
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            .certificate-preview {
+                padding: 20px;
             }
         }
     </style>
@@ -141,12 +165,12 @@
 <body>
 
     <div class="container">
-        <h1>Blood Donation Certificate Generator</h1>
-
-        <!-- Form to input details -->
+        <h1>Blood Donation Certificate</h1>
+        
         <div class="form-container">
-            <input type="text" id="name" placeholder="Enter Full Name" required>
-            <select id="bloodType" required>
+            <input type="text" id="name" placeholder="Enter Full Name" oninput="updateCertificate()" required>
+            
+            <select id="bloodType" onchange="updateCertificate()" required>
                 <option value="">Select Blood Type</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -157,45 +181,51 @@
                 <option value="AB+">AB+</option>
                 <option value="AB-">AB-</option>
             </select>
-            <input type="date" id="donationDate" required>
-            <button onclick="generateCertificate()">Generate Certificate</button>
+            
+            <input type="date" id="donationDate" onchange="updateCertificate()" required>
+            
+            <button onclick="showCertificate()">Generate Certificate</button>
+            <button onclick="downloadCertificate()">Download as JPEG</button>
         </div>
 
-        <!-- Certificate Preview -->
         <div class="certificate-preview" id="certificatePreview">
             <h2>Blood Donation Certificate</h2>
-            <div class="certificate-content">
+            <div class="certificate-content" id="certificateContent">
                 <p>We hereby certify that</p>
-                <p class="name" id="certName"></p>
+                <p class="name" id="certName">________</p>
                 <p>has donated blood with the blood type</p>
-                <p class="blood-type" id="certBloodType"></p>
+                <p class="blood-type" id="certBloodType">____</p>
                 <p>on</p>
-                <p class="date" id="certDate"></p>
-                <img src="https://via.placeholder.com/200x100?text=Certified" alt="Certified">
+                <p class="date" id="certDate">__/__/____</p>
+                <img src="https://via.placeholder.com/150x80?text=Certified" alt="Certified">
             </div>
         </div>
     </div>
 
     <script>
-        function generateCertificate() {
-            // Get the values from the form
-            const name = document.getElementById('name').value;
-            const bloodType = document.getElementById('bloodType').value;
-            const donationDate = document.getElementById('donationDate').value;
+        function updateCertificate() {
+            document.getElementById('certName').innerText = document.getElementById('name').value || "________";
+            document.getElementById('certBloodType').innerText = document.getElementById('bloodType').value || "____";
+            let dateValue = document.getElementById('donationDate').value;
+            document.getElementById('certDate').innerText = dateValue ? new Date(dateValue).toLocaleDateString() : "__/__/____";
+        }
 
-            // Validate inputs
-            if (name === '' || bloodType === '' || donationDate === '') {
+        function showCertificate() {
+            if (!document.getElementById('name').value || !document.getElementById('bloodType').value || !document.getElementById('donationDate').value) {
                 alert('Please fill in all fields!');
                 return;
             }
-
-            // Fill in the certificate with user data
-            document.getElementById('certName').innerText = name;
-            document.getElementById('certBloodType').innerText = bloodType;
-            document.getElementById('certDate').innerText = new Date(donationDate).toLocaleDateString();
-
-            // Show the certificate preview
             document.getElementById('certificatePreview').style.display = 'block';
+        }
+
+        function downloadCertificate() {
+            const certificate = document.getElementById('certificatePreview');
+            html2canvas(certificate, { backgroundColor: "#fff" }).then(canvas => {
+                let link = document.createElement('a');
+                link.href = canvas.toDataURL('image/jpeg');
+                link.download = 'blood_donation_certificate.jpg';
+                link.click();
+            });
         }
     </script>
 
