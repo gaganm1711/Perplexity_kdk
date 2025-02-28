@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Blood Donation Certificate</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .form-container input, .form-container select {
+            width: 300px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-container input:focus, .form-container select:focus {
+            border-color: #ff4b6e;
+            outline: none;
+        }
+
+        button {
+            padding: 12px 30px;
+            background-color: #ff4b6e;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e3434e;
+        }
+
+        .certificate-preview {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            border: 5px solid #ff4b6e;
+            display: none;
+        }
+
+        .certificate-preview h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .certificate-content {
+            text-align: center;
+            font-size: 18px;
+            color: #444;
+        }
+
+        .certificate-content .name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff4b6e;
+        }
+
+        .certificate-content .blood-type {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff4b6e;
+        }
+
+        .certificate-content .date {
+            font-size: 1.2rem;
+            color: #888;
+        }
+
+        .certificate-content img {
+            max-width: 200px;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .form-container input, .form-container select {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Blood Donation Certificate Generator</h1>
+
+        <!-- Form to input details -->
+        <div class="form-container">
+            <input type="text" id="name" placeholder="Enter Full Name" required>
+            <select id="bloodType" required>
+                <option value="">Select Blood Type</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+            </select>
+            <input type="date" id="donationDate" required>
+            <button onclick="generateCertificate()">Generate Certificate</button>
+        </div>
+
+        <!-- Certificate Preview -->
+        <div class="certificate-preview" id="certificatePreview">
+            <h2>Blood Donation Certificate</h2>
+            <div class="certificate-content">
+                <p>We hereby certify that</p>
+                <p class="name" id="certName"></p>
+                <p>has donated blood with the blood type</p>
+                <p class="blood-type" id="certBloodType"></p>
+                <p>on</p>
+                <p class="date" id="certDate"></p>
+                <img src="https://via.placeholder.com/200x100?text=Certified" alt="Certified">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateCertificate() {
+            // Get the values from the form
+            const name = document.getElementById('name').value;
+            const bloodType = document.getElementById('bloodType').value;
+            const donationDate = document.getElementById('donationDate').value;
+
+            // Validate inputs
+            if (name === '' || bloodType === '' || donationDate === '') {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            // Fill in the certificate with user data
+            document.getElementById('certName').innerText = name;
+            document.getElementById('certBloodType').innerText = bloodType;
+            document.getElementById('certDate').innerText = new Date(donationDate).toLocaleDateString();
+
+            // Show the certificate preview
+            document.getElementById('certificatePreview').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

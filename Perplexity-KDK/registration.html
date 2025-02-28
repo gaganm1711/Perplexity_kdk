@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #ff4b6e, #ff9367);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #444;
+            margin: 15px 0 5px;
+            text-align: left;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            transition: border-color 0.3s ease-in-out;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff4b6e;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: #ff4b6e;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff2b56;
+        }
+
+        .checkbox-container {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .checkbox-container label {
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: #666;
+        }
+
+        #responseMessage {
+            margin-top: 20px;
+            font-size: 1rem;
+            color: #28a745;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Blood Donation Registration</h1>
+        <form id="donationForm">
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required placeholder="Enter your full name">
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" required placeholder="Enter your age">
+
+            <label for="bloodType">Blood Type:</label>
+            <select id="bloodType" name="bloodType" required>
+                <option value="">Select Blood Type</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+            </select>
+
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label for="donationDate">Preferred Donation Date:</label>
+            <input type="date" id="donationDate" name="donationDate" required>
+
+            <div class="checkbox-container">
+                <label>
+                    <input type="checkbox" id="donorAgreement" name="donorAgreement" required>
+                    I agree to donate blood voluntarily.
+                </label>
+            </div>
+
+            <button type="submit">Submit Registration</button>
+        </form>
+        <p id="responseMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById('donationForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form from submitting
+
+            // Get values from the form
+            let name = document.getElementById('name').value;
+            let age = document.getElementById('age').value;
+            let bloodType = document.getElementById('bloodType').value;
+            let gender = document.getElementById('gender').value;
+            let donationDate = document.getElementById('donationDate').value;
+            let donorAgreement = document.getElementById('donorAgreement').checked;
+
+            // Validation
+            if (name === "" || age === "" || bloodType === "" || gender === "" || donationDate === "" || !donorAgreement) {
+                alert("Please fill in all fields and agree to donate.");
+                return;
+            }
+
+            // Simulate a successful registration
+            let responseMessage = `Thank you for registering, ${name}!\n\nYour details:\n`;
+            responseMessage += `Age: ${age}\nBlood Type: ${bloodType}\nGender: ${gender}\nPreferred Donation Date: ${donationDate}\n`;
+
+            document.getElementById('responseMessage').textContent = responseMessage;
+
+            // Clear form after submission
+            document.getElementById('donationForm').reset();
+        });
+    </script>
+</body>
+</html>
